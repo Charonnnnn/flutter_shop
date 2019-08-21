@@ -32,7 +32,7 @@ class _IndexPageState extends State<IndexPage> {
     ),
   ];
 
-  final List tabBodies = [
+  final List<Widget> tabBodies = [
     HomePage(),
     MemberPage(),
     CartPage(),
@@ -65,7 +65,11 @@ class _IndexPageState extends State<IndexPage> {
           });
         },
       ),
-      body: currentPage,
+      //IndexedStack和Stack一样，都是层布局控件， 可以在一个控件上面放置另一个控件，但唯一不同的是IndexedStack在同一时刻只能显示子控件中的一个控件，通过Index属性来设置显示的控件
+      body: IndexedStack(
+        index: currentIndex,
+        children: tabBodies,
+      ),
     );
   }
 }
