@@ -4,6 +4,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,6 +13,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   
+  int page = 1;
+  List<Map> hotGoodsList = [];
+
+
   @override
   bool get wantKeepAlive => true;
   
@@ -24,19 +29,23 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     //     homePageContent = val.toString();
     //   });
     // });
+
+    // _getHotGoods();
     print('1111111');
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    var formData = {'lon':'115.02932', 'lat':'35.76189'};
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('HomePage'),
         elevation: 0.0,
       ),
       body: FutureBuilder(
-        future: getHomePageContent(),
+        future: request('homePageContent',formData:formData),
         builder: (context,snapshot){
           if(snapshot.hasData){
             // 数据处理
@@ -54,8 +63,18 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
             List<Map> floor2Content = (data['data']['floor2'] as List).cast();
             List<Map> floor3Content = (data['data']['floor3'] as List).cast();
 
-            return SingleChildScrollView(
-              child: Column(
+            return EasyRefresh(
+              footer: ClassicalFooter(
+                bgColor: Colors.white,
+                textColor: Colors.pink,
+                infoColor: Colors.pink,
+                showInfo: true,
+                noMoreText: '',
+                infoText: '加载中',
+                loadReadyText: '上拉加载中' 
+              ),
+
+              child: ListView(
                 children: <Widget>[
                   SwiperDIY(swiperDataList:swiper),
                   TopNavigator(navigatorList: navigatorList,),
@@ -68,8 +87,21 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                   FloorContent(floorGoodsList: floor2Content,),
                   FloorTitle(pic_addr: floor3Title,),
                   FloorContent(floorGoodsList: floor3Content,),
+                  _hotGoods(),
                 ],
               ),
+              onLoad: ()async{
+                print('开始加载更多');
+                var formData = {'page':page};
+                await request('homePageBelowConten',formData: formData).then((val){
+                  var data = json.decode(val.toString());
+                  List<Map> newGoodsList = (data['data'] as List).cast();
+                  setState(() {
+                    hotGoodsList.addAll(newGoodsList);
+                    page++;
+                  });
+                });
+              }
             );
           }else{
             return Center(
@@ -80,6 +112,71 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
       ),
     );
   }
+
+  // void _getHotGoods(){
+  //   var formData = {'page':page};
+  //   request('homePageBelowConten',formData: formData).then((val){
+  //     var data = json.decode(val.toString());
+  //     List<Map> newGoodsList = (data['data'] as List).cast();
+  //     setState(() {
+  //       hotGoodsList.addAll(newGoodsList);
+  //       page++;
+  //     });
+  //   });
+  // }
+
+  Widget hotTitle = Container(
+    margin: EdgeInsets.only(top: 10.0),
+    alignment: Alignment.center,
+    color: Colors.transparent,
+    padding: EdgeInsets.all(5.0),
+    child: Text('热卖专区'),
+  );
+
+  Widget _wrapList(){
+    if(hotGoodsList.length != 0){
+      List<Widget> listWidget = hotGoodsList.map((val){
+        return InkWell(
+          onTap: (){},
+          child: Container(
+            width: ScreenUtil().setWidth(372.0),
+            color: Colors.white,
+            padding: EdgeInsets.all(5.0),
+            margin: EdgeInsets.only(bottom: 3.0),
+            child: Column(
+              children: <Widget>[
+                Image.network(val['image'],width:ScreenUtil().setWidth(370)),
+                Text(val['name'],maxLines: 1,overflow: TextOverflow.ellipsis,style: TextStyle(color: Colors.pink, fontSize: ScreenUtil().setSp(26.0)),),
+                Row(children: <Widget>[
+                  Text('\$${val['mallPrice']}\t\t\t'),
+                  Text('\$${val['price']}',style: TextStyle(color: Colors.black26,decoration: TextDecoration.lineThrough),),
+                ],)
+              ],
+            ),
+          ),
+        );
+      }).toList();
+
+      return Wrap( // 流式布局
+        spacing: 2,
+        children: listWidget,
+      );
+    }else{
+      return Text('');
+    }
+  }
+
+  Widget _hotGoods(){
+    return Container(
+      child: Column(
+        children: <Widget>[
+          hotTitle,
+          _wrapList(),
+        ],
+      ),
+    );
+  }
+
 }
 
 class SwiperDIY extends StatelessWidget {
@@ -135,6 +232,7 @@ class TopNavigator extends StatelessWidget {
       height: ScreenUtil.getInstance().setHeight(320),
       padding: EdgeInsets.all(3.0),
       child: GridView.count(
+        physics: NeverScrollableScrollPhysics(),  //取消其回弹效果
         crossAxisCount: 5,
         padding: EdgeInsets.all(5.0),
         children: navigatorList.map((item){
@@ -321,6 +419,9 @@ class FloorContent extends StatelessWidget {
     );
   }
 }
+
+
+
 
 
 
