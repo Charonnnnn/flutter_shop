@@ -39,7 +39,7 @@ class ChildCategory with ChangeNotifier{  // 不用管理听众, 谁都可以获
   // 增加页数
   addPage(){
     page++;
-    notifyListeners();
+    // notifyListeners();
   }
   changeNoMoreText(String text){
     noMoreText = text;
