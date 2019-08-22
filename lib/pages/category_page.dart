@@ -325,6 +325,14 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
       // });
       if (categorySubGoods.data == null) {
         Provide.value<ChildCategory>(context).changeNoMoreText('没有更多了');
+        Fluttertoast.showToast(
+          msg: '已经到底了',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,  // 提示位置
+          backgroundColor: Colors.pink,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       } else {
         Provide.value<CategoryGoodsListProvide>(context)
             .getMoreList(categorySubGoods.data);

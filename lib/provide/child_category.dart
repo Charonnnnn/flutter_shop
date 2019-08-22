@@ -16,7 +16,7 @@ class ChildCategory with ChangeNotifier{  // 不用管理听众, 谁都可以获
     noMoreText = '';
 
     BxMallSubDto all = BxMallSubDto();
-    all.mallSubId = '00';
+    all.mallSubId = '';
     all.mallCategoryId = '00';
     all.mallSubName = '全部';
     all.comments = 'null';
