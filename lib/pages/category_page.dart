@@ -367,10 +367,10 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
                         infoColor: Colors.pink,
                         showInfo: true,
                         noMoreText: Provide.value<ChildCategory>(context).noMoreText,
-                        infoText: '加载中',
-                        loadReadyText: '准备加载',
-                        loadingText: '上拉加载中',
-                        loadedText: '加载完成',
+                        infoText: '加载中 at %T',
+                        // loadReadyText: '准备加载',
+                        // loadingText: '上拉加载中',
+                        // loadedText: '加载完成',
                       ),
                         
                     child: ListView.builder(

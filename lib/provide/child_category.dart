@@ -12,8 +12,12 @@ class ChildCategory with ChangeNotifier{  // 不用管理听众, 谁都可以获
   getChildCategory(List<BxMallSubDto> list, String id){
     childIndex = 0;  // 点击大类切换道第一索引
     categoryId = id;
+
     page = 1; // 切换大类 切换到第一页
     noMoreText = '';
+
+    subId=''; //点击大类时，把子类ID清空
+    noMoreText='';
 
     BxMallSubDto all = BxMallSubDto();
     all.mallSubId = '';
