@@ -8,6 +8,7 @@ import 'package:fluro/fluro.dart';
 import './routers/routes.dart';
 import './routers/application.dart';
 import './provide/details_info.dart';
+import './provide/cart.dart';
 
 
 void main() {
@@ -15,6 +16,7 @@ void main() {
   var childCategory = ChildCategory();
   var goodsList = CategoryGoodsListProvide();
   var goodsInfo = DetailsInfoProvide();
+  var cartInfo = CartProvide();
   
   var providers = Providers();
 
@@ -22,7 +24,8 @@ void main() {
     ..provide(Provider<Counter>.value(counter))
     ..provide(Provider<ChildCategory>.value(childCategory))
     ..provide(Provider<CategoryGoodsListProvide>.value(goodsList))
-    ..provide(Provider<DetailsInfoProvide>.value(goodsInfo));
+    ..provide(Provider<DetailsInfoProvide>.value(goodsInfo))
+    ..provide(Provider<CartProvide>.value(cartInfo));
 
   //ProviderNode封装了InheritWidget，并且提供了 一个providers容器用于放置状态
   runApp(ProviderNode(child:MyApp(),providers:providers));
