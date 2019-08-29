@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shop/routers/application.dart';
 import 'package:provide/provide.dart';
 import '../service/service_method.dart';
 import 'dart:convert';
@@ -102,8 +103,7 @@ class _LeftCategoryNavState extends State<LeftCategoryNav> {
         });
         var childList = list[index].bxMallSubDto;
         var categoryId = list[index].mallCategoryId;
-        Provide.value<ChildCategory>(context)
-            .getChildCategory(childList, categoryId);
+        Provide.value<ChildCategory>(context).getChildCategory(childList, categoryId);
         _getSubGoods(categoryId: categoryId);
       },
       child: Container(
@@ -283,7 +283,9 @@ class _CategoryGoodsListState extends State<CategoryGoodsList> {
 
   Widget _listIteminkWell(List newList, int index) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Application.router.navigateTo(context,"/detail?id=${newList[index].goodsId}");
+      },
       child: Container(
         padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
         decoration: BoxDecoration(
