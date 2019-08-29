@@ -72,7 +72,9 @@ class CartBottom extends StatelessWidget {
         width: ScreenUtil().setWidth(160),
         padding: EdgeInsets.only(left: 10.0),
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            
+          },
           child: Container(
             padding: EdgeInsets.all(10.0),
             alignment: Alignment.center,
