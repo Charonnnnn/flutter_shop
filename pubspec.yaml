@@ -35,6 +35,8 @@ dependencies:
   flutter_html: ^0.9.6
   shared_preferences: ^0.5.3+4
 
+  jpush_flutter: ^0.0.13
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

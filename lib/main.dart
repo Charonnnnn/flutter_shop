@@ -11,6 +11,8 @@ import './provide/details_info.dart';
 import './provide/cart.dart';
 import './provide/currentIndex.dart';
 
+import './pages/jpush_test_page.dart';
+
 
 void main() {
   var counter = Counter();
@@ -50,6 +52,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.pink,
       ),
       home: IndexPage(),
+      // home: JPushPage(),
     );
   }
 }
